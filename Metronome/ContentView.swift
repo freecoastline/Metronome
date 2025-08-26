@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        @State var bpm = ""
+        
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+            TextField("BPM", text: $bpm)
             Text("Hello, world!")
         }
         .padding()
