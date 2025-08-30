@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct MetronomeApp: App {
+    @StateObject var metronome = MetronomeViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: metronome)
         }
     }
 }

@@ -11,6 +11,10 @@ import SwiftUI
 class MetronomeViewModel:ObservableObject {
     @Published var model = MetronomeModel(bpm: 60)
     
+    var currenBpm:Int {
+        model.bpm
+    }
+    
     func currentModel() -> MetronomeModel {
         model
     }
@@ -30,7 +34,12 @@ class MetronomeViewModel:ObservableObject {
     }
     
     func togglePlaying() {
-        model.playing = !model.playing
+        if model.playing {
+            model.audioPlayer?.pause()
+        } else {
+            model.audioPlayer?.play()
+        }
+        model.playing.toggle()
     }
     
 }

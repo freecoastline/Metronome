@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel = MetronomeViewModel()
+    @ObservedObject var viewModel:MetronomeViewModel
 
     var body: some View {
         VStack {
@@ -25,8 +25,6 @@ struct ContentView: View {
                 Spacer()
             }
             Spacer()
-            Text("\(viewModel.model.bpm)")
-                .font(.largeTitle)
             HStack {
                 Spacer()
                 MetronomeCircle(circleColor: Color.init(uiColor: .init(red: 116, green: 155, blue: 194, alpha: 1.0)), radius: 30, iconString: "minus").onTapGesture {
@@ -65,5 +63,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: MetronomeViewModel())
 }
