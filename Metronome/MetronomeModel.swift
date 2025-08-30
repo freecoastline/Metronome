@@ -6,8 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct MetronomeModel {
-    var number = 126
-    var times = 4
+class MetronomeModel:ObservableObject {
+    @Published var bpm:Int
+    @Published var playing:Bool = false
+    init(bpm: Int) {
+        self.bpm = bpm
+    }
 }
