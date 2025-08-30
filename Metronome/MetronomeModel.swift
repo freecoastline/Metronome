@@ -40,8 +40,10 @@ struct MetronomeModel {
              }
              
              if player.prepareToPlay() {
+                 audioPlayer?.numberOfLoops = -1
+                 audioPlayer?.enableRate = true
+                 audioPlayer?.rate = Float(bpm) / 60.0
                  print("音频准备就绪")
-                 audioPlayer?.play()
                  // 可选：设置循环播放
                  // player.numberOfLoops = -1 // -1表示无限循环
              } else {

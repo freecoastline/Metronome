@@ -21,11 +21,17 @@ class MetronomeViewModel:ObservableObject {
     
     func add1Bpm() {
         model.bpm += 1
+        updatePlayRate()
+    }
+    
+    func updatePlayRate() {
+        model.audioPlayer?.rate = Float(model.bpm) / 60.0
     }
     
     func minus1Bpm() {
         let oldValue = model.bpm
         model.bpm = max(40, model.bpm - 1)
+        updatePlayRate()
         print("BPM changed from \(oldValue) to \(model.bpm)") // 验证值是否变化
     }
     
