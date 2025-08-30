@@ -39,13 +39,25 @@ struct ContentView: View {
                 Spacer()
             }
             Spacer()
-            Image(systemName: "play.circle.fill")
-                .resizable()
-                .frame(width: 100, height: 100)
-                .foregroundColor(Color.init(uiColor: .init(red: 145, green: 200, blue: 228, alpha: 1.0)))
-                .onTapGesture {
-                    viewModel.togglePlaying()
-                }
+            ZStack(alignment: .center) {
+                Image(systemName: "play.circle.fill")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(Color.init(uiColor: .init(red: 145, green: 200, blue: 228, alpha: 1.0)))
+                    .onTapGesture {
+                        viewModel.togglePlaying()
+                    }
+                    .opacity(viewModel.model.playing ? 0 : 1)
+                Image(systemName: "pause.circle.fill")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(Color.init(uiColor: .init(red: 145, green: 200, blue: 228, alpha: 1.0)))
+                    .onTapGesture {
+                        viewModel.togglePlaying()
+                    }
+                    .opacity(viewModel.model.playing ? 1 : 0)
+            }
+
             Spacer()
         }
         .background(Color.init(uiColor: .init(red: 255, green: 251, blue: 222, alpha: 1.0)))
