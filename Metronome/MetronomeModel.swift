@@ -21,7 +21,7 @@ struct MetronomeModel {
     // 单独的方法设置音频播放器，便于调试和复用
     private mutating func setupAudioPlayer() {
          // 检查文件是否存在
-         guard let soundURL = Bundle.main.url(forResource: "taylor", withExtension: "mp3") else {
+         guard let soundURL = Bundle.main.url(forResource: "woodenFish", withExtension: "m4a") else {
              print("错误：找不到音频文件 'taylor.mp3'")
              print("请确保文件已添加到项目中，并且Target Membership已勾选")
              return
