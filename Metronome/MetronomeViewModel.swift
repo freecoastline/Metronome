@@ -40,12 +40,14 @@ class MetronomeViewModel:ObservableObject {
     }
     
     func togglePlaying() {
-        if model.playing {
-            model.audioPlayer?.pause()
-        } else {
-            model.audioPlayer?.play()
+        DispatchQueue.main.async {
+            if self.model.playing {
+                self.model.audioPlayer?.pause()
+            } else {
+                self.model.audioPlayer?.play()
+            }
+            self.model.playing.toggle()
         }
-        model.playing.toggle()
     }
     
 }
