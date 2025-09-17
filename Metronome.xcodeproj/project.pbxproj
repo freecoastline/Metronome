@@ -10,9 +10,22 @@
 		BEBC7A3D2E5D3EC10049107C /* Metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BE9B7CA12E7A469C00570DC2 /* Exceptions for "Metronome" folder in "Metronome" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BEBC7A3C2E5D3EC10049107C /* Metronome */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BEBC7A3F2E5D3EC10049107C /* Metronome */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BE9B7CA12E7A469C00570DC2 /* Exceptions for "Metronome" folder in "Metronome" target */,
+			);
 			path = Metronome;
 			sourceTree = "<group>";
 		};
