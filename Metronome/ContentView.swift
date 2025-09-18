@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel:MetronomeViewModel
-
+    @FocusState var isFocused: Bool
     var body: some View {
         VStack {
             Spacer()
@@ -18,6 +18,16 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                     .fontDesign(.monospaced)
                     .font(.system(size: 130))
+                    .keyboardType(.decimalPad)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                            }
+                            .fontWeight(.bold)
+                        }
+                    }
             }
             HStack {
                 Spacer()
