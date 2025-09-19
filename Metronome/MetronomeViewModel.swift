@@ -20,6 +20,9 @@ class MetronomeViewModel:ObservableObject {
     }
     
     func add1Bpm() {
+        if (model.bpm > 230) {
+            return
+        }
         model.bpm += 1
         updatePlayRate()
     }
@@ -36,7 +39,13 @@ class MetronomeViewModel:ObservableObject {
     }
     
     func changeBPM(_ bpm:Int) {
-        model.bpm = bpm
+        if bpm < 40 {
+            model.bpm = 40
+        } else if bpm > 230 {
+            model.bpm = 230
+        } else {
+            model.bpm = bpm
+        }
     }
     
     func togglePlaying() {
