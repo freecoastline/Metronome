@@ -11,10 +11,6 @@ import SwiftUI
 class MetronomeViewModel:ObservableObject {
     @Published var model = MetronomeModel(bpm: 60)
     
-    var currenBpm:Int {
-        model.bpm
-    }
-    
     func currentModel() -> MetronomeModel {
         model
     }
@@ -45,6 +41,16 @@ class MetronomeViewModel:ObservableObject {
             model.bpm = 230
         } else {
             model.bpm = bpm
+        }
+    }
+    
+    func currentBPM() -> Int {
+        if model.bpm < 40 {
+            return 40
+        } else if model.bpm > 230 {
+            return 230
+        } else {
+            return model.bpm
         }
     }
     

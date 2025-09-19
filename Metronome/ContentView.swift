@@ -40,7 +40,7 @@ struct ContentView: View {
                 MetronomeCircle(circleColor: Color.init(uiColor: .init(red: 116, green: 155, blue: 194, alpha: 1.0)), radius: 30, iconString: "minus").onTapGesture {
                         viewModel.minus1Bpm()
                     }
-                MetronomeProgressView(bpmValue: viewModel.model.bpm)
+                MetronomeProgressView(bpmValue: viewModel.currentBPM())
                 MetronomeCircle(circleColor: Color.init(uiColor: .init(red: 116, green: 155, blue: 194, alpha: 1.0)), radius: 30, iconString: "plus").onTapGesture {
                         viewModel.add1Bpm()
                 }

@@ -18,7 +18,7 @@ struct MetronomeProgressView:View {
             Divider()
             Circle().fill(Color.init(uiColor: .init(red: 70, green: 130, blue: 169, alpha: 1.0)))
                 .frame(width:indicatorRadius, height: indicatorRadius)
-                .offset(x:CGFloat(startOffset + (CGFloat(bpmValue) / totalValue) * 380), y: 0)
+                .offset(x:CGFloat(startOffset + (CGFloat(bpmValue - 30) / totalValue) * 380), y: 0)
         }
     }
 }
