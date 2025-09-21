@@ -16,7 +16,7 @@ class MetronomeViewModel:ObservableObject {
     }
     
     func add1Bpm() {
-        if (model.bpm > 230) {
+        if (model.bpm > 180) {
             return
         }
         model.bpm += 1
@@ -47,8 +47,8 @@ class MetronomeViewModel:ObservableObject {
     func currentBPM() -> Int {
         if model.bpm < 40 {
             return 40
-        } else if model.bpm > 230 {
-            return 230
+        } else if model.bpm > 180 {
+            return 180
         } else {
             return model.bpm
         }

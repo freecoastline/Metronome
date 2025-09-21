@@ -12,7 +12,7 @@ struct MetronomeProgressView:View {
     let bpmValue:Int
     let totalValue = 200.0
     let indicatorRadius = 15.0
-    let startOffset = -190.0
+    let startOffset = -160.0
     var body: some View {
         ZStack {
             Divider()
