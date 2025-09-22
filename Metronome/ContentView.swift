@@ -8,70 +8,144 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel:MetronomeViewModel
-    @FocusState var isFocused: Bool
+    @StateObject private var viewModel = MetronomeViewModel()
+    @FocusState private var isBPMFieldFocused: Bool
+    @State private var bpmTextInput: String = ""
+    
+    // MARK: - Theme
+    private enum Theme {
+        static let backgroundColor = Color.metronomeBackground
+        static let controlColor = Color.metronomeControl
+        static let playButtonColor = Color.metronomePlayButton
+        static let primaryFontSize: CGFloat = 130
+    }
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Spacer()
-            HStack {
-                TextField("number", value: $viewModel.model.bpm, format: .number)
-                    .multilineTextAlignment(.center)
-                    .fontDesign(.monospaced)
-                    .font(.system(size: 130))
-                    .keyboardType(.decimalPad)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Done") {
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                            }
-                            .fontWeight(.bold)
-                        }
-                    }
-            }
-            HStack {
-                Spacer()
-                Text("BPM").multilineTextAlignment(.center).font(.footnote)
-                Spacer()
-            }
+            
+            // BPM Display and Input
+            bpmInputSection
+            
             Spacer()
-            HStack {
-                Spacer()
-                MetronomeCircle(circleColor: Color.init(uiColor: .init(red: 116, green: 155, blue: 194, alpha: 1.0)), radius: 30, iconString: "minus").onTapGesture {
-                        viewModel.minus1Bpm()
-                    }
-                MetronomeProgressView(bpmValue: viewModel.currentBPM())
-                MetronomeCircle(circleColor: Color.init(uiColor: .init(red: 116, green: 155, blue: 194, alpha: 1.0)), radius: 30, iconString: "plus").onTapGesture {
-                        viewModel.add1Bpm()
-                }
-                Spacer()
-            }
+            
+            // Control Section
+            controlSection
+            
             Spacer()
-            ZStack(alignment: .center) {
-                Image(systemName: "play.circle.fill")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(Color.init(uiColor: .init(red: 145, green: 200, blue: 228, alpha: 1.0)))
-                    .onTapGesture {
-                        viewModel.togglePlaying()
-                    }
-                    .opacity(viewModel.model.playing ? 0 : 1)
-                Image(systemName: "pause.circle.fill")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(Color.init(uiColor: .init(red: 145, green: 200, blue: 228, alpha: 1.0)))
-                    .onTapGesture {
-                        viewModel.togglePlaying()
-                    }
-                    .opacity(viewModel.model.playing ? 1 : 0)
-            }
-
+            
+            // Play/Pause Button
+            playPauseButton
+            
             Spacer()
         }
-        .background(Color.init(uiColor: .init(red: 255, green: 251, blue: 222, alpha: 1.0)))
+        .background(Theme.backgroundColor)
+        .onAppear {
+            bpmTextInput = String(viewModel.bpm)
+        }
+        .onChange(of: viewModel.bpm) { _, newBPM in
+            if !isBPMFieldFocused {
+                bpmTextInput = String(newBPM)
+            }
+        }
+    }
+    
+    // MARK: - View Components
+    @ViewBuilder
+    private var bpmInputSection: some View {
+        VStack(spacing: 8) {
+            TextField("BPM", text: $bpmTextInput)
+                .multilineTextAlignment(.center)
+                .fontDesign(.monospaced)
+                .font(.system(size: Theme.primaryFontSize, weight: .medium))
+                .keyboardType(.numberPad)
+                .focused($isBPMFieldFocused)
+                .onSubmit {
+                    updateBPMFromText()
+                }
+                .onChange(of: isBPMFieldFocused) { _, isFocused in
+                    if !isFocused {
+                        updateBPMFromText()
+                    }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") {
+                            isBPMFieldFocused = false
+                        }
+                        .fontWeight(.semibold)
+                    }
+                }
+            
+            Text("BPM")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+        }
+    }
+    
+    @ViewBuilder
+    private var controlSection: some View {
+        HStack(spacing: 30) {
+            // Decrease BPM Button
+            MetronomeCircle(
+                circleColor: Theme.controlColor,
+                radius: 30,
+                iconString: "minus"
+            )
+            .onTapGesture {
+                viewModel.decreaseBPM()
+                provideFeedback()
+            }
+            
+            // Progress Indicator
+            MetronomeProgressView(bpmValue: viewModel.bpm)
+            
+            // Increase BPM Button
+            MetronomeCircle(
+                circleColor: Theme.controlColor,
+                radius: 30,
+                iconString: "plus"
+            )
+            .onTapGesture {
+                viewModel.increaseBPM()
+                provideFeedback()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var playPauseButton: some View {
+        Button(action: {
+            viewModel.togglePlayback()
+            provideFeedback()
+        }) {
+            Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                .resizable()
+                .frame(width: 100, height: 100)
+                .foregroundColor(viewModel.isAudioReady ? Theme.playButtonColor : .gray)
+        }
+        .disabled(!viewModel.isAudioReady)
+        .scaleEffect(viewModel.isPlaying ? 1.1 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: viewModel.isPlaying)
+    }
+    
+    // MARK: - Helper Methods
+    private func updateBPMFromText() {
+        if let bpm = Int(bpmTextInput) {
+            viewModel.setBPM(bpm)
+        } else {
+            // Reset to current viewModel value if invalid input
+            bpmTextInput = String(viewModel.bpm)
+        }
+    }
+    
+    private func provideFeedback() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.impactOccurred()
     }
 }
 
 #Preview {
-    ContentView(viewModel: MetronomeViewModel())
+    ContentView()
 }

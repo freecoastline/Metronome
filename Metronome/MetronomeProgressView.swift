@@ -5,20 +5,45 @@
 //  Created by ken on 2025/8/30.
 //
 
-import Foundation
 import SwiftUI
 
-struct MetronomeProgressView:View {
-    let bpmValue:Int
-    let totalValue = 200.0
-    let indicatorRadius = 15.0
-    let startOffset = -160.0
+struct MetronomeProgressView: View {
+    let bpmValue: Int
+    
+    // MARK: - Constants
+    private enum Constants {
+        static let minBPM: Double = 40
+        static let maxBPM: Double = 230
+        static let totalRange: Double = maxBPM - minBPM
+        static let trackWidth: CGFloat = 320
+        static let indicatorSize: CGFloat = 16
+        static let trackColor = Color.metronomeProgress
+        static let backgroundColor = Color.gray.opacity(0.3)
+    }
+    
+    private var progressRatio: Double {
+        let clampedBPM = max(Constants.minBPM, min(Constants.maxBPM, Double(bpmValue)))
+        return (clampedBPM - Constants.minBPM) / Constants.totalRange
+    }
+    
+    private var indicatorOffset: CGFloat {
+        let halfTrack = Constants.trackWidth / 2
+        return CGFloat(progressRatio * Double(Constants.trackWidth)) - halfTrack
+    }
+    
     var body: some View {
         ZStack {
-            Divider()
-            Circle().fill(Color.init(uiColor: .init(red: 70, green: 130, blue: 169, alpha: 1.0)))
-                .frame(width:indicatorRadius, height: indicatorRadius)
-                .offset(x:CGFloat(startOffset + (CGFloat(bpmValue - 30) / totalValue) * 380), y: 0)
+            // Background track
+            Capsule()
+                .fill(Constants.backgroundColor)
+                .frame(width: Constants.trackWidth, height: 4)
+            
+            // Progress indicator
+            Circle()
+                .fill(Constants.trackColor)
+                .frame(width: Constants.indicatorSize, height: Constants.indicatorSize)
+                .offset(x: indicatorOffset)
+                .animation(.easeOut(duration: 0.2), value: indicatorOffset)
         }
     }
 }
